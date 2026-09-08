@@ -1,0 +1,53 @@
+name: Build and Release Mod
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '10.0.x'
+
+      # Downloads VS server 1.22 assemblies into temporary folder on runner
+      - name: Download Vintage Story Assemblies
+        run: |
+          mkdir -p ../Vintagestory
+          curl -sL "https://cdn.vintagestory.at/gamefiles/stable/vs_server_linux-x64_1.22.0.tar.gz" | tar -xz -C ../Vintagestory
+
+      # Passes VINTAGE_STORY_PATH directly to match your .csproj and Directory.Build.props
+      - name: Build Project
+        run: dotnet build -c Release -p:VINTAGE_STORY_PATH=../Vintagestory
+
+      # Collects net10.0 outputs and packages zip
+      - name: Package Mod Zip
+        run: |
+          mkdir -p dist
+          cp bin/Release/net10.0/ZoomButtonPatch.dll dist/ 2>/dev/null || true
+          cp bin/Release/net10.0/modinfo.json dist/ 2>/dev/null || cp modinfo.json dist/ 2>/dev/null || true
+          cp modicon.png dist/ 2>/dev/null || true
+          cd dist
+          zip -r ../ZoomButtonPatch_${{ github.ref_name }}.zip .
+
+      - name: Compute SHA256 Checksum
+        run: sha256sum ZoomButtonPatch_${{ github.ref_name }}.zip > ZoomButtonPatch_${{ github.ref_name }}.zip.sha256
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          files: |
+            ZoomButtonPatch_${{ github.ref_name }}.zip
+            ZoomButtonPatch_${{ github.ref_name }}.zip.sha256
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
