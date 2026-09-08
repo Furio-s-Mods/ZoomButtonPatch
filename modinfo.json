@@ -1,0 +1,13 @@
+{
+  "type": "code",
+  "side": "client",
+  "modid": "zoombuttonpatch",
+  "name": "Zoom Button Patch",
+  "authors": ["Furio"],
+  "description": "Adds compatibility with external mods",
+  "version": "2.0.0",
+  "dependencies": {
+    "game": "1.22.0",
+    "zoombuttonreborn": "2.0.4"
+  }
+}

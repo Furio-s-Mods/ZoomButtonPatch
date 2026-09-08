@@ -1,0 +1,46 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <AssemblyName>ZoomButtonPatch</AssemblyName>
+    <!-- <LangVersion>latest</LangVersion>
+    <Nullable>disable</Nullable> -->
+
+    <!-- Rimuove il file .deps.json dalla cartella di output -->
+    <GenerateDependencyFile>false</GenerateDependencyFile>
+
+    <!-- Impedisce la generazione dei file di debug .pdb -->
+    <DebugType>none</DebugType>
+    <DebugSymbols>false</DebugSymbols>
+    <DefaultItemExcludes>$(DefaultItemExcludes);docs\**</DefaultItemExcludes>
+</PropertyGroup>
+
+  <ItemGroup>
+    <Reference Include="VintagestoryAPI">
+      <HintPath>$(VINTAGE_STORY_PATH)/VintagestoryAPI.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <!-- <Reference Include="VintagestoryLib">
+      <HintPath>$(VINTAGE_STORY_PATH)/VintagestoryLib.dll</HintPath>
+      <Private>false</Private>
+    </Reference> -->
+    <Reference Include="Harmony">
+      <HintPath>$(VINTAGE_STORY_PATH)/Lib/0Harmony.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <!-- <Reference Include="Essentials">
+      <HintPath>$(VINTAGE_STORY_PATH)/Mods/VSEssentials.dll</HintPath>
+      <Private>false</Private>
+    </Reference> -->
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="modinfo.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <!-- <None Include="modicon.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None> -->
+  </ItemGroup>
+</Project>
